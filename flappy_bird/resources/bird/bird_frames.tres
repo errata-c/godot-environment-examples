@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" load_steps=4 format=2]
+
+[ext_resource path="res://resources/bird/bird_0.tres" type="Texture" id=1]
+[ext_resource path="res://resources/bird/bird_2.tres" type="Texture" id=2]
+[ext_resource path="res://resources/bird/bird_1.tres" type="Texture" id=3]
+
+[resource]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 1 ) ],
+"loop": true,
+"name": "flap",
+"speed": 20.0
+} ]

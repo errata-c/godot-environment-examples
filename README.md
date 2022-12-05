@@ -1,2 +1,5 @@
-# godot-environment-examples
-Example environments for the godot-environment RL library
+# Environments:
+This repository contains a number of different example environments for use with the `godot-environment` library.
+
+
+

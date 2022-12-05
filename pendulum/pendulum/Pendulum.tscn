@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://sprites/pendulum_pin.svg" type="Texture" id=1]
+[ext_resource path="res://sprites/pendulum_end_cap.svg" type="Texture" id=2]
+[ext_resource path="res://sprites/pendulum_arm.svg" type="Texture" id=3]
+[ext_resource path="res://pendulum/Pendulum.gd" type="Script" id=5]
+
+[node name="Pendulum" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="Arm" type="Node2D" parent="."]
+position = Vector2( 500, 350 )
+
+[node name="End" type="Sprite" parent="Arm"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 0, 180 )
+texture = ExtResource( 2 )
+
+[node name="Start" type="Sprite" parent="Arm"]
+modulate = Color( 0, 0, 0, 1 )
+texture = ExtResource( 2 )
+
+[node name="Middle" type="Sprite" parent="Arm"]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 0, 90 )
+texture = ExtResource( 3 )
+
+[node name="Pivot" type="Sprite" parent="Arm"]
+modulate = Color( 0.498039, 0.882353, 0.47451, 1 )
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}

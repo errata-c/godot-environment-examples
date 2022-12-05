@@ -1,0 +1,102 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://nodes/bird/Bird.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Kenney Bold.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://resources/Ground.tres" type="Texture" id=4]
+[ext_resource path="res://sprites/59894.png" type="Texture" id=5]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 5 )
+region = Rect2( 0, 0, 144, 256 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 187.972, 16.3047 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 64
+font_data = ExtResource( 2 )
+
+[node name="Game" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Node2D" type="Node2D" parent="."]
+scale = Vector2( 3, 3 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="Node2D"]
+scroll_base_scale = Vector2( 0.5, 0.5 )
+
+[node name="City" type="ParallaxLayer" parent="Node2D/ParallaxBackground"]
+z_index = -10
+motion_mirroring = Vector2( 1657, 0 )
+
+[node name="Sprite" type="Sprite" parent="Node2D/ParallaxBackground/City"]
+position = Vector2( 66.2159, 228.161 )
+scale = Vector2( 4, 4 )
+texture = SubResource( 1 )
+
+[node name="Sprite2" type="Sprite" parent="Node2D/ParallaxBackground/City"]
+position = Vector2( 619.216, 228.161 )
+scale = Vector2( 4, 4 )
+texture = SubResource( 1 )
+
+[node name="Sprite3" type="Sprite" parent="Node2D/ParallaxBackground/City"]
+position = Vector2( 1171.22, 228.161 )
+scale = Vector2( 4, 4 )
+texture = SubResource( 1 )
+
+[node name="Bird" parent="Node2D" instance=ExtResource( 1 )]
+position = Vector2( 42.6332, 95.2478 )
+
+[node name="GroundCollide" type="StaticBody2D" parent="Node2D"]
+position = Vector2( 179.952, 199.012 )
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/GroundCollide"]
+position = Vector2( -4.21527, -6.30467 )
+shape = SubResource( 2 )
+
+[node name="ParallaxBackground2" type="ParallaxBackground" parent="Node2D"]
+layer = 1
+offset = Vector2( 0, 581 )
+transform = Transform2D( 1, 0, 0, 1, 0, 581 )
+scroll_base_scale = Vector2( 3, 3 )
+
+[node name="Ground" type="ParallaxLayer" parent="Node2D/ParallaxBackground2"]
+motion_mirroring = Vector2( 1344, 0 )
+
+[node name="Sprite" type="Sprite" parent="Node2D/ParallaxBackground2/Ground"]
+position = Vector2( 106.028, 4.36841 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 4 )
+
+[node name="Sprite2" type="Sprite" parent="Node2D/ParallaxBackground2/Ground"]
+position = Vector2( 442.027, 4.36813 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 4 )
+
+[node name="Sprite3" type="Sprite" parent="Node2D/ParallaxBackground2/Ground"]
+position = Vector2( 778.027, 4.36813 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 4 )
+
+[node name="Sprite4" type="Sprite" parent="Node2D/ParallaxBackground2/Ground"]
+position = Vector2( 1114.03, 4.36813 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 4 )
+
+[node name="GameOver" type="Label" parent="."]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -48.0
+margin_bottom = 48.0
+custom_fonts/font = SubResource( 3 )
+text = "Game Over"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

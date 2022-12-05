@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://mountain_car/MountainCar.gd" type="Script" id=1]
+[ext_resource path="res://sprites/box.svg" type="Texture" id=2]
+[ext_resource path="res://sprites/circle.svg" type="Texture" id=3]
+[ext_resource path="res://mountain_car/Pole.gd" type="Script" id=4]
+
+[node name="CartPole" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Cart" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Cart"]
+modulate = Color( 0, 0, 0, 1 )
+scale = Vector2( 0.5, 0.3 )
+texture = ExtResource( 2 )
+
+[node name="Pole" type="Node2D" parent="Cart"]
+script = ExtResource( 4 )
+
+[node name="Arm" type="Sprite" parent="Cart/Pole"]
+modulate = Color( 0.792157, 0.596078, 0.396078, 1 )
+position = Vector2( 0, -10 )
+scale = Vector2( 0.1, 0.3 )
+texture = ExtResource( 2 )
+
+[node name="Base" type="Sprite" parent="Cart/Pole"]
+modulate = Color( 0.505882, 0.517647, 0.796078, 1 )
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 3 )
+
+[node name="Floor" type="Sprite" parent="."]
+modulate = Color( 0, 0, 0, 1 )
+scale = Vector2( 1, 0.01 )
+texture = ExtResource( 2 )
