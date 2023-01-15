@@ -10,8 +10,8 @@ config_version=4
 
 [application]
 
-config/name="Pendulum"
-run/main_scene="res://Setup.tscn"
+config/name="RL Pendulum"
+run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
 [physics]

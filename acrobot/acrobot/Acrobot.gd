@@ -1,5 +1,10 @@
 extends Node2D
 
+# The Solver is using position based dynamics, modified slightly for 2D.
+# See:
+#   Müller, M., Macklin, M., Chentanez, N., Jeschke, S. and Kim, T.-Y. (2020), 
+#   Detailed Rigid Body Simulation with Extended Position Based Dynamics. 
+#   Computer Graphics Forum, 39: 101-112. https://doi.org/10.1111/cgf.14105
 var solver_class = load("res://acrobot/PBD_Solver.gd")
 var solver
 
@@ -18,6 +23,36 @@ var dt = 0.05
 
 func _ready():
 	solver = solver_class.new()
+
+func define_spaces(Env):
+	# The definition of the actions that can be taken by the agent
+	var act = {
+		# Fixed directional force to apply, -1 for left, +1 for right
+		"action": {
+			"type": "i8",
+			"range": [-1,1],
+			"dims": [1,1,1,1]
+		}
+	}
+	
+	# 6 values defining the state of the system.
+	
+	# 0 -> cosine of first angle
+	# 1 -> sine of first angle
+	# 2 -> cosine of the second angle
+	# 3 -> sine of the second angle
+	# 4 -> angular velocity of the first link
+	# 5 -> angular velocity of the second link
+	var obs = {
+		"state": {
+			"type": "f64",
+			"range": [-4.8, 4.8],
+			"dims": [6,1,1,1]
+		}
+	}
+	
+	Env.define_action_space(act)
+	Env.define_observation_space(obs)
 
 # Method to compute the observation for the scene, not a part of the interface
 func compute_observation(Env):

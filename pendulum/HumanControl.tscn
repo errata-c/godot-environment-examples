@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://HumanControl.gd" type="Script" id=1]
 [ext_resource path="res://fonts/Roboto-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://bin/environment_node.gdns" type="Script" id=3]
+[ext_resource path="res://pendulum/Pendulum.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 46
@@ -13,6 +15,11 @@ font_data = ExtResource( 2 )
 
 [node name="HumanControl" type="Node"]
 script = ExtResource( 1 )
+
+[node name="Env" type="Node" parent="."]
+script = ExtResource( 3 )
+
+[node name="Pendulum" parent="." instance=ExtResource( 4 )]
 
 [node name="RewardLabel" type="Label" parent="."]
 margin_left = 36.5457
@@ -34,18 +41,12 @@ margin_bottom = 198.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "done: false"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VelocityLabel" type="Label" parent="."]
-margin_left = 38.9092
-margin_top = 516.767
-margin_right = 296.909
-margin_bottom = 579.767
+margin_left = 35.0
+margin_top = 392.0
+margin_right = 293.0
+margin_bottom = 455.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "velocity: 0.0"
-__meta__ = {
-"_edit_use_anchors_": false
-}

@@ -7,30 +7,66 @@ var angle = 0.0
 var angular_velocity = 0.0
 var torque = 0.0
 
+export var dt = 1.0 / 60.0
+export var g = -10.0
+
+func define_spaces(Env):
+	# The definition of the actions that can be taken by the agent
+	var act = {
+		# Force to apply, negative -1 is clockwise, 1 is counter clockwise
+		"force": {
+			"type": "f64",
+			"range": [-1,1],
+			"dims": [1,1,1,1]
+		}
+	}
+	
+	# The definition of the observations that will be sent to the agent
+	var obs = {
+		"x": {
+			"type": "f64",
+			"range": [-1, 1],
+			"dims": [1,1,1,1]
+		},
+		"y": {
+			"type": "f64",
+			"range": [-1, 1],
+			"dims": [1,1,1,1]
+		},
+		"angular_velocity": {
+			"type": "f64",
+			"range": [-8, 8],
+			"dims": [1,1,1,1]
+		}
+	}
+	
+	Env.define_action_space(act)
+	Env.define_observation_space(obs)
+
 # Method to compute the observation for the scene, not a part of the interface
 func compute_observation(Env):
 	var x = cos(angle)
 	var y = sin(angle)
 	var vel = angular_velocity
 	
-	Env.set_observation("x", x)
-	Env.set_observation("y", y)
-	Env.set_observation("angular_velocity", vel)
+	var obs = Env.observation_space
 	
-	var norm_angle = atan2(y,x)
+	obs["x"].set_flat(0, x)
+	obs["y"].set_flat(0, y)
+	obs["angular_velocity"].set_flat(0, vel)
+	
+	var norm_angle = angle_normalize(angle)
 	
 	# This imposes an action cost for the torque
 	# It also makes it so that only a still upright position is 
 	# high reward, not just passing by the upright spot.
-	Env.reward = -16.2736044 + (norm_angle * norm_angle + 0.1 * vel * vel + 0.001 * torque * torque)
+	var costs = norm_angle * norm_angle + 0.1 * vel * vel + 0.001 * torque * torque 
+	Env.reward = -costs
 	Env.done = step_count > 600
 
 # Interface method, called by the EnvironmentNode
 func step(Env):
-	var dt = 1.0 / 60.0
-	var g = -10.0
-	
-	torque = Env.get_action("force") * 2.0
+	torque = Env.action_space["force"].get_flat(0) * 2.0
 	torque = clamp(torque, -2.0, 2.0)
 	
 	var nthdot = angular_velocity + (3.0 * g / 2.0 * sin(angle) + 3.0 * torque) * dt
@@ -45,6 +81,7 @@ func step(Env):
 	
 	step_count += 1
 	
+	
 	compute_observation(Env)
 
 # Interface method, called by the EnvironmentNode
@@ -57,3 +94,6 @@ func reset(Env):
 	$Arm.rotation = angle
 	
 	compute_observation(Env)
+
+func angle_normalize(x):
+	return fmod((x ), (2 * PI)) - PI

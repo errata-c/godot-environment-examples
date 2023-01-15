@@ -98,11 +98,11 @@ func solve_joint_1():
 	
 	var c = dpos.length()
 	var n = dpos.normalized()
-	var ln = left_rot(n)
 	
 	var r1 = joint - form.origin
+	var lt = r1.dot(left_rot(n))
 	
-	var w = imass + r1.dot(ln) / inertia
+	var w = imass + lt * lt / inertia
 	
 	var p = (-c / w) * n
 	
@@ -127,8 +127,11 @@ func solve_joint_2():
 	var r1 = target - form1.origin
 	var r2 = joint - form2.origin
 	
-	var w1 = imass + r1.dot(ln) / inertia
-	var w2 = imass + r2.dot(ln) / inertia
+	var lt1 = r1.dot(ln)
+	var lt2 = r2.dot(ln)
+	
+	var w1 = imass + lt1 * lt1 / inertia
+	var w2 = imass + lt2 * lt2 / inertia
 	
 	var p = (-c / (w1 + w2)) * n
 	

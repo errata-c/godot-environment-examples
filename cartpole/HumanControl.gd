@@ -1,28 +1,22 @@
 extends Node2D
 
-export var reward = 0.0
-export var done = false
-
-var actions = {
-	"force": 0.0
-}
 var node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	node = load("cartpole/Cartpole.tscn").instance()
-	add_child(node)
+	$Env.human_control = true
 	
+	node = $CartPole
 	node.step_delta = 0.005
 	node.position = get_viewport_rect().size * 0.5
 	node.scale = Vector2(2.0, 2.0)
-	node.reset(self)
+	node.define_spaces($Env)
+	node.reset($Env)
 
-func _physics_process(delta):
-	node.step(self)
-	$RewardLabel.text = "reward: %.2f" % reward
-	$DoneLabel.text = "done: {0}".format([done])
-
+func _process(_delta):
+	node.step($Env)
+	$RewardLabel.text = "reward: %.2f" % $Env.reward
+	$DoneLabel.text = "done: {0}".format([$Env.done])
 
 var leftHeld = false
 var rightHeld = false
@@ -43,12 +37,4 @@ func _input(event):
 	if rightHeld:
 		force += 1
 	
-	actions["force"] = force + 1
-
-func set_observation(name, value):
-	if name == "angular_velocity":
-		$VelocityLabel.text = "velocity: %.2f" % value
-		pass
-
-func get_action(name):
-	return actions[name]
+	$Env.action_space["force"].set_flat(0, force + 1)

@@ -1,27 +1,26 @@
 extends Node2D
 
-export var reward = 0.0
-export var done = false
-
-var actions = {
-	"action": 0
-}
 var node
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	node = load("acrobot/Acrobot.tscn").instance()
-	add_child(node)
+	$Env.human_control = true
 	
-	#node.step_delta = 0.005
+	node = $Acrobot
+	
+	node.define_spaces($Env)
 	node.position = get_viewport_rect().size * Vector2(0.5, 0.25)
-	node.reset(self)
+	node.reset($Env)
 
-func _physics_process(_delta):
-	node.step(self)
-	$RewardLabel.text = "reward: %.2f" % reward
-	$DoneLabel.text = "done: {0}".format([done])
-
+func _process(_delta):
+	var step = node.step($Env)
+	$RewardLabel.text = "reward: %.2f" % $Env.reward
+	$DoneLabel.text = "done: {0}".format([$Env.done])
+	
+	var obs = $Env.observation_space
+	
+	$Link1AV.text = "link 1 angular velocity: %.2f" % obs["state"].get_flat(4)
+	$Link2AV.text = "link 2 angular velocity: %.2f" % obs["state"].get_flat(5)
 
 var leftHeld = false
 var rightHeld = false
@@ -42,12 +41,4 @@ func _input(event):
 	elif rightHeld:
 		force += 1
 	
-	actions["action"] = force
-
-func set_observation(name, value):
-	if name == "angular_velocity":
-		$VelocityLabel.text = "velocity: %.2f" % value
-		pass
-
-func get_action(name):
-	return actions[name]
+	$Env.action_space["action"] = force

@@ -23,6 +23,44 @@ var angle_threshold = deg2rad(12.0)
 
 var steps_beyond_terminate = -1
 
+func define_spaces(Env):
+	# The definition of the actions that can be taken by the agent
+	var act = {
+		# Fixed directional force to apply, 0 for left, 1 for right
+		"force": {
+			"type": "i8",
+			"range": [0,1],
+			"dims": [1,1,1,1]
+		}
+	}
+	
+	# The definition of the observations that will be sent to the agent
+	var obs = {
+		"position": {
+			"type": "f64",
+			"range": [-4.8, 4.8],
+			"dims": [1,1,1,1]
+		},
+		"velocity": {
+			"type": "f64",
+			"range": [-INF, INF],
+			"dims": [1,1,1,1]
+		},
+		"pole_angle": {
+			"type": "f64",
+			"range": [-deg2rad(28.0), deg2rad(28.0)],
+			"dims": [1,1,1,1]
+		},
+		"pole_angular_velocity": {
+			"type": "f64",
+			"range": [-INF, INF],
+			"dims": [1,1,1,1]
+		}
+	}
+	
+	Env.define_action_space(act)
+	Env.define_observation_space(obs)
+
 func _ready():
 	var rect = get_viewport_rect()
 	var size = rect.size
@@ -30,10 +68,12 @@ func _ready():
 
 # Method to compute the observation for the scene, not a part of the interface
 func compute_observation(Env):
-	Env.set_observation("position", x_position)
-	Env.set_observation("velocity", velocity)
-	Env.set_observation("pole_angle", angle)
-	Env.set_observation("pole_angular_velocity", angular_velocity)
+	var obs = Env.observation_space
+	
+	obs.position.set_flat(0, x_position)
+	obs.velocity.set_flat(0, velocity)
+	obs.pole_angle.set_flat(0, angle)
+	obs.pole_angular_velocity.set_flat(0, angular_velocity)
 	
 	var terminated = x_position < -position_threshold or x_position > position_threshold or angle < -angle_threshold or angle > angle_threshold
 	
@@ -50,7 +90,7 @@ func compute_observation(Env):
 
 # Interface method, called by the EnvironmentNode
 func step(Env):
-	var action = Env.get_action("force")
+	var action = Env.action_space.force.get_flat(0)
 	
 	var force = (action - 1) * force_mag
 	
